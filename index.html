@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>ExtractHistoricalFxBacen</title>
+</head>
+<body>
+    <header>
+        <h1>Histórico de taxas de câmbio BACEN</h1>
+    </header>
+
+    <section>
+        <div id="moedas">
+            <form action="choose_fx">   
+                <div id="fx_info">
+                    <label for="fx_select">Escolha uma moeda:</label>
+                    <select id="fx_select" name="fx_select">
+
+                    </select>
+                </div>
+    
+                <!--Radio buttons for choosing type of quote -->
+                <div id="fx_quoteType" class="radio">
+                    <input type="radio" name="quoteType" id="quote" value="quote" checked>
+                    <label for="quote">Cotação: BRL/moeda</label><br>
+                    <input type="radio" name="quoteType" id="parity" value="parity">
+                    <label for="parity">Paridade: tipo A = USD/moeda, tipo B = moeda/USD</label><br>
+                </div>
+
+                <!--Radio button for choosing-->
+                <div id="fx_bulletinType" class="radio">
+                    <input type="radio" name="bulletinType" id="open" value="open">
+                    <label for="open">Abertura</label><br>
+                    <input type="radio" name="bulletinType" id="intermediate" value="intermediate">
+                    <label for="intermediate">Intermediário</label><br>
+                    <input type="radio" name="bulletinType" id="interbankClose" value="interbankClose">
+                    <label for="interbanckClose">Fechamento interbancário</label><br>
+                    <input type="radio" name="bulletinType" id="close" value="close" checked>
+                    <label for="close">Fechamento</label><br>
+                </div>
+
+                <!-- Button as div-->
+                <div id="button">
+                    <p>Gera o gráfico</p>
+                </div>
+              </form>
+        </div>
+
+        <div id="chart_container">
+            <div id="chart">
+
+            </div>
+        </div>
+    
+    </section>
+
+    <footer>
+
+    </footer>
+    
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+</html>
