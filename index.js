@@ -54,7 +54,6 @@ const dicBulletinType = {
     close: "Fechamento"
 };
 
-
 //Identifica o seletor dropdown (para escolha da taxa de câmbio)
 const selectElement = document.querySelector('#fx_select')
 
@@ -95,15 +94,19 @@ const buttonElement = document.querySelector('#button');
 const radioQuoteElements = document.getElementsByName("quoteType");
 const radioBulletinElements = document.getElementsByName("bulletinType");
 const chartElement = document.getElementById('chart');
+const loadingImgElement = document.getElementById('loadingImg');
+
+//Esconde o gif de loading
+loadingImgElement.style.display = 'none';
 
 //Define o dia de hoje
 const today = new Date();
 const todayBacenStr = ("0" + (today.getMonth() + 1).toString()).slice(-2) + '-' + ("0" + today.getDate().toString()).slice(-2) + '-' + today.getFullYear();
 //console.log(todayBacenStr);
 
-//Encapsula função de gráfico para poder passar os parâmetros
+//Encapsula (closure) a função de gráfico para poder passar os parâmetros
 const createPlotBacen = (chartElement, fx, quoteType) => (fx_data) => {
-    //Extrai dados (vamos usar for, ao invés do map, pois são várias séries, e talvez seja mais rápido...)
+    //Extrai dados (vamos usar 'for', ao invés do 'map', pois são várias séries, e talvez seja mais rápido...)
     const dt = [];
     const quoteBuy = [];
     const quoteSell = [];
@@ -117,9 +120,11 @@ const createPlotBacen = (chartElement, fx, quoteType) => (fx_data) => {
         paritySell.push(fx_data[i].paridadeVenda);
     };
 
+    //Define séries de "compra" e "venda"
     const yBuy = (quoteType == 'quote') ?  quoteBuy : parityBuy;
     const ySell = (quoteType == 'quote') ? quoteSell : paritySell;
     
+    //Define série 1 do gráfico ("compra")
     let trace1 = {
         x: dt,
         y: yBuy,
@@ -127,6 +132,7 @@ const createPlotBacen = (chartElement, fx, quoteType) => (fx_data) => {
         name: 'Compra'
     };
       
+    //Define série 2 do gráfico ("venda")
     let trace2 = {
         x: dt,
         y: ySell,
@@ -140,6 +146,7 @@ const createPlotBacen = (chartElement, fx, quoteType) => (fx_data) => {
     //Define 'layout': objeto com parâmetros para o gráfico
     let titleStr = '';
     let yTitleStr = '';
+
     if(quoteType === 'quote'){
         titleStr = 'Histórico da cotação de ' + fx;
         yTitleStr = 'BRL/' + fx ;
@@ -156,12 +163,17 @@ const createPlotBacen = (chartElement, fx, quoteType) => (fx_data) => {
         }
     };
       
+    //Cria o gráfico
+    loadingImgElement.style.display = 'none';
     Plotly.newPlot(chartElement, data, layout);
 };
 
 
 //Coloca um event listener no botão, para geração do gráfico
 const onClickGraph = (evt) =>{
+    //Mostra o gif de loading
+    loadingImgElement.style.display = 'block';
+
     const fx = selectElement.value;
     //console.log(fx);
     const quoteType = [...radioQuoteElements].filter(radio => radio.checked)[0].value;
